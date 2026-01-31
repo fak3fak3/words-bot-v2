@@ -1,4 +1,4 @@
-package services
+package bot
 
 import (
 	"fmt"
@@ -10,19 +10,18 @@ import (
 	tele "gopkg.in/telebot.v4"
 )
 
-type BotService struct {
+type Bot struct {
 	cfg *config.Config
-	h   *handlers.Handlers
+	b   *tele.Bot
 }
 
-func newBotService(cfg *config.Config, h *handlers.Handlers) *BotService {
-	return &BotService{
+func Create(cfg *config.Config) *Bot {
+	return &Bot{
 		cfg: cfg,
-		h:   h,
 	}
 }
 
-func (s *BotService) Start() {
+func (s *Bot) Init(h *handlers.Handlers) error {
 	pref := tele.Settings{
 		Token:  os.Getenv("TG_BOT_TOKEN"),
 		Poller: &tele.LongPoller{Timeout: 10 * time.Second},
@@ -31,10 +30,16 @@ func (s *BotService) Start() {
 	b, err := tele.NewBot(pref)
 	if err != nil {
 		fmt.Errorf("failed to create bot: %w", err)
-		return
+		return err
 	}
+	s.b = b
 
-	b.Handle("/start", s.h.Bot.OnStart)
+	s.b.Handle("/start", h.Bot.OnStart)
+	s.b.Handle(tele.OnText, h.Bot.OnText)
 
-	b.Start()
+	return nil
+}
+
+func (s *Bot) Start() {
+	s.b.Start()
 }

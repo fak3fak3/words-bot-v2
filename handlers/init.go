@@ -1,11 +1,13 @@
 package handlers
 
+import "words/services"
+
 type Handlers struct {
 	Bot *BotHandlers
 }
 
-func NewHandlers() *Handlers {
+func NewHandlers(s *services.Services) *Handlers {
 	return &Handlers{
-		Bot: newBotHandlers(),
+		Bot: newBotHandlers(s),
 	}
 }

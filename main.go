@@ -2,6 +2,7 @@ package main
 
 import (
 	"words/apis"
+	"words/bot"
 	"words/config"
 	"words/db"
 	"words/handlers"
@@ -30,12 +31,15 @@ func main() {
 		panic(err)
 	}
 
-	handlers := handlers.NewHandlers()
-
-	s, err := services.Init(repos, cfg, apis, handlers)
+	s, err := services.Init(repos, cfg, apis)
 	if err != nil {
 		panic(err)
 	}
 
-	s.BotService.Start()
+	handlers := handlers.NewHandlers(s)
+
+	bot := bot.Create(cfg)
+
+	bot.Init(handlers)
+	bot.Start()
 }
