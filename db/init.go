@@ -3,6 +3,7 @@ package db
 import (
 	"log"
 	"words/config"
+	"words/types"
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -25,22 +26,16 @@ func Init(c *config.Config) (*DB, error) {
 
 	log.Println("Connected to Postgres database")
 
-	// log.Println("Starting database migrations...")
-	// err = db.AutoMigrate(
-	// 	&models.Media{},
-	// 	&models.Tag{},
-	// 	&models.File{},
-	// 	&models.Stream{},
-	// 	&models.StreamCredentials{},
-	// 	&models.Rotation{},
-	// 	&models.Show{},
-	// 	&models.Jingle{},
-	// )
-	// if err != nil {
-	// 	log.Printf("Migration error: %v", err)
-	// 	return nil, err
-	// }
-	// log.Println("Database migrations completed successfully")
+	log.Println("Starting database migrations...")
+	err = db.AutoMigrate(
+		&types.Word{},
+		&types.WordDefinition{},
+	)
+	if err != nil {
+		log.Printf("Migration error: %v", err)
+		return nil, err
+	}
+	log.Println("Database migrations completed successfully")
 
 	return &DB{
 		Postgres: db,

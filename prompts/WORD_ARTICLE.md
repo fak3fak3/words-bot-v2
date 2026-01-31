@@ -14,6 +14,7 @@ json schema (must match exactly):
 
 {
 “word”: string,
+"language" string,
 “transcription”: string,
 “definitions”: [
 {

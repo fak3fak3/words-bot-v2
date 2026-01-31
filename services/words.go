@@ -7,6 +7,7 @@ import (
 	"strings"
 	"words/apis"
 	"words/repos"
+	"words/types"
 )
 
 type WordsService struct {
@@ -21,10 +22,18 @@ func NewWordsService(r *repos.Repos, apis *apis.APIs) *WordsService {
 	}
 }
 
-func (s *WordsService) CreateWordDefinition(word string, language string) (*repos.Word, error) {
+func (s *WordsService) CreateWordDefinition(word string, language string) (*types.WordResponse, error) {
 	data, err := os.ReadFile("prompts/WORD_ARTICLE.md")
 	if err != nil {
 		panic(err)
+	}
+
+	responseDB, err := s.r.WordsRepo.GetWordDetailsByWordAndLang(word, language)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get word details from DB: %w", err)
+	}
+	if responseDB != nil {
+		return responseDB, nil
 	}
 
 	str := string(data)
@@ -36,11 +45,16 @@ func (s *WordsService) CreateWordDefinition(word string, language string) (*repo
 		return nil, fmt.Errorf("failed to generate response: %w", err)
 	}
 
-	response := repos.Word{}
+	response := types.WordResponse{}
 
 	err = json.Unmarshal([]byte(chatResponseBytes), &response)
 	if err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
+	}
+
+	err = s.r.WordsRepo.SaveWordDetails(&response)
+	if err != nil {
+		return nil, fmt.Errorf("failed to save word details: %w", err)
 	}
 
 	return &response, nil

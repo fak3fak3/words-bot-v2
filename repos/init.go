@@ -1,13 +1,25 @@
 package repos
 
-import "words/db"
+import (
+	"words/db"
+	"words/types"
+)
+
+type WordsRepoInterface interface {
+	GetWordDetailsByWordAndLang(word string, language string) (*types.WordResponse, error)
+	SaveWordDetails(wordResp *types.WordResponse) error
+}
 
 type Repos struct {
-	db *db.DB
+	db        *db.DB
+	WordsRepo WordsRepoInterface
 }
 
 func Init(db *db.DB) (*Repos, error) {
+	wordsRepo := NewWordsRepo(db)
+
 	return &Repos{
-		db: db,
+		db:        db,
+		WordsRepo: wordsRepo,
 	}, nil
 }

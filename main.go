@@ -36,7 +36,7 @@ func main() {
 		panic(err)
 	}
 
-	response, err := s.WordsService.CreateWordDefinition("chat", "en")
+	response, err := s.WordsService.CreateWordDefinition("cat", "en")
 	if err != nil {
 		panic(err)
 	}
