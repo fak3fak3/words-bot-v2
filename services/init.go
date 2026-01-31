@@ -1,6 +1,7 @@
 package services
 
 import (
+	"words/apis"
 	"words/config"
 	"words/repos"
 )
@@ -8,15 +9,15 @@ import (
 type Services struct {
 	r *repos.Repos
 
-	ChatComplition *ChatComplitionService
+	WordsService *WordsService
 }
 
-func Init(r *repos.Repos, cfg *config.Config) (*Services, error) {
-	chat := NewChatComplitionService(r, cfg)
+func Init(r *repos.Repos, cfg *config.Config, apis *apis.APIs) (*Services, error) {
+	wordsService := NewWordsService(r, apis)
 
 	return &Services{
 		r: r,
 
-		ChatComplition: chat,
+		WordsService: wordsService,
 	}, nil
 }

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"words/apis"
 	"words/config"
 	"words/db"
 	"words/repos"
@@ -25,12 +26,17 @@ func main() {
 		panic(err)
 	}
 
-	s, err := services.Init(repos, cfg)
+	apis, err := apis.Init(cfg)
 	if err != nil {
 		panic(err)
 	}
 
-	response, err := s.ChatComplition.GenerateResponse("hello mr model")
+	s, err := services.Init(repos, cfg, apis)
+	if err != nil {
+		panic(err)
+	}
+
+	response, err := s.WordsService.CreateWordDefinition("chat", "en")
 	if err != nil {
 		panic(err)
 	}

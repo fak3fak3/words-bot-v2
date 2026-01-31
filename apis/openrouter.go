@@ -1,27 +1,24 @@
-package services
+package apis
 
 import (
 	"context"
 	"words/config"
-	"words/repos"
 
 	"github.com/davecgh/go-spew/spew"
 	openrouter "github.com/revrost/go-openrouter"
 )
 
-type ChatComplitionService struct {
-	r   *repos.Repos
+type OpenRouterAPI struct {
 	cfg *config.Config
 }
 
-func NewChatComplitionService(r *repos.Repos, cfg *config.Config) *ChatComplitionService {
-	return &ChatComplitionService{
-		r:   r,
+func NewOpenRouterAPI(cfg *config.Config) *OpenRouterAPI {
+	return &OpenRouterAPI{
 		cfg: cfg,
 	}
 }
 
-func (s *ChatComplitionService) GenerateResponse(prompt string) (string, error) {
+func (s *OpenRouterAPI) GenerateResponse(prompt string) (string, error) {
 	client := openrouter.NewClient(
 		s.cfg.OpenRouterAPIKey,
 		openrouter.WithXTitle("Words Bot"),
@@ -30,7 +27,7 @@ func (s *ChatComplitionService) GenerateResponse(prompt string) (string, error) 
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openrouter.ChatCompletionRequest{
-			Model: "nvidia/nemotron-3-nano-30b-a3b:free",
+			Model: "arcee-ai/trinity-large-preview:free",
 			Messages: []openrouter.ChatCompletionMessage{
 				openrouter.UserMessage(prompt),
 			},
@@ -42,5 +39,7 @@ func (s *ChatComplitionService) GenerateResponse(prompt string) (string, error) 
 		return "", err
 	}
 
-	return resp.Choices[0].Message.Content.Text, nil
+	respStr := resp.Choices[0].Message.Content.Text
+
+	return respStr, nil
 }
