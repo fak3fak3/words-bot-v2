@@ -5,6 +5,8 @@ import (
 	"words/db"
 	"words/repos"
 	"words/services"
+
+	"github.com/davecgh/go-spew/spew"
 )
 
 func main() {
@@ -23,9 +25,14 @@ func main() {
 		panic(err)
 	}
 
-	_, err = services.Init(repos)
+	s, err := services.Init(repos, cfg)
 	if err != nil {
 		panic(err)
 	}
 
+	response, err := s.ChatComplition.GenerateResponse("hello mr model")
+	if err != nil {
+		panic(err)
+	}
+	spew.Dump(response)
 }
