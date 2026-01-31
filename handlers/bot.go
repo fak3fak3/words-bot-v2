@@ -20,8 +20,18 @@ func newBotHandlers(s *services.Services) *BotHandlers {
 }
 
 func (h *BotHandlers) OnStart(c tele.Context) error {
-	spew.Dump(c.Sender())
-	return c.Send("Welcome to the Words Bot! Use /define <word> to get the definition.")
+	ok, err := h.s.AuthService.SignUp(c.Sender().ID, c.Sender().Username, c.Sender().FirstName, c.Sender().LastName)
+
+	spew.Dump(ok)
+
+	if err != nil {
+		spew.Dump("SignUp error: %v\n", err)
+		return c.Send("Error during sign up: " + err.Error())
+	}
+	if !ok {
+		return c.Send("Welcome to the Words Bot! Send me a word and I'll provide you with its definition and an image.")
+	}
+	return c.Send("Welcome back to the Words Bot!")
 }
 
 func (h *BotHandlers) OnText(c tele.Context) error {

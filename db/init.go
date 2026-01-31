@@ -30,6 +30,7 @@ func Init(c *config.Config) (*DB, error) {
 	err = db.AutoMigrate(
 		&types.Word{},
 		&types.WordDefinition{},
+		&types.User{},
 	)
 	if err != nil {
 		log.Printf("Migration error: %v", err)
