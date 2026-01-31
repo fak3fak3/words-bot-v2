@@ -22,5 +22,6 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/revrost/go-openrouter v1.1.5
 	golang.org/x/text v0.21.0 // indirect
+	gopkg.in/telebot.v4 v4.0.0-beta.7
 	gorm.io/driver/postgres v1.6.0
 )

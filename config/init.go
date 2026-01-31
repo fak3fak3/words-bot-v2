@@ -9,6 +9,8 @@ import (
 type Config struct {
 	OpenRouterAPIKey string
 
+	TgBotToken string
+
 	PostgresHost   string
 	PostgresPort   string
 	PostgresUser   string
@@ -24,6 +26,7 @@ func Init() (*Config, error) {
 
 	return &Config{
 		OpenRouterAPIKey: os.Getenv("OPEN_ROUTER_API_KEY"),
+		TgBotToken:       os.Getenv("TG_BOT_TOKEN"),
 		PostgresHost:     os.Getenv("PostgresHost"),
 		PostgresPort:     os.Getenv("PostgresPort"),
 		PostgresUser:     os.Getenv("PostgresUser"),

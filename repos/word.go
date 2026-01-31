@@ -12,7 +12,7 @@ type WordsRepo struct {
 	db *db.DB
 }
 
-func NewWordsRepo(db *db.DB) *WordsRepo {
+func newWordsRepo(db *db.DB) *WordsRepo {
 	return &WordsRepo{db: db}
 }
 

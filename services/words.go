@@ -15,7 +15,7 @@ type WordsService struct {
 	r    *repos.Repos
 }
 
-func NewWordsService(r *repos.Repos, apis *apis.APIs) *WordsService {
+func newWordsService(r *repos.Repos, apis *apis.APIs) *WordsService {
 	return &WordsService{
 		apis: apis,
 		r:    r,

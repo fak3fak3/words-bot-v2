@@ -4,10 +4,9 @@ import (
 	"words/apis"
 	"words/config"
 	"words/db"
+	"words/handlers"
 	"words/repos"
 	"words/services"
-
-	"github.com/davecgh/go-spew/spew"
 )
 
 func main() {
@@ -31,14 +30,12 @@ func main() {
 		panic(err)
 	}
 
-	s, err := services.Init(repos, cfg, apis)
+	handlers := handlers.NewHandlers()
+
+	s, err := services.Init(repos, cfg, apis, handlers)
 	if err != nil {
 		panic(err)
 	}
 
-	response, err := s.WordsService.CreateWordDefinition("cat", "en")
-	if err != nil {
-		panic(err)
-	}
-	spew.Dump(response)
+	s.BotService.Start()
 }

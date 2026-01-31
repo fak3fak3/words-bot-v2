@@ -16,7 +16,7 @@ type Repos struct {
 }
 
 func Init(db *db.DB) (*Repos, error) {
-	wordsRepo := NewWordsRepo(db)
+	wordsRepo := newWordsRepo(db)
 
 	return &Repos{
 		db:        db,
